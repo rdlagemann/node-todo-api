@@ -30,3 +30,5 @@ app.listen(port, () => {
   console.log(`Start listen on port ${port}`)
 })
 
+
+module.exports = {app}
