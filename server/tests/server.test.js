@@ -122,7 +122,6 @@ describe('DELETE /todos/:id', () =>{
             done()
           })
           .catch(err => done(err))
-
       })
 
   })
