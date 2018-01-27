@@ -123,7 +123,21 @@ describe('DELETE /todos/:id', () =>{
           })
           .catch(err => done(err))
       })
+  })
+})
+
+describe('PATCH /todos/:id', () => {
+    test('', done => {
+
+      request(app)
+        .patch(`/todos/${todos[0]._id}`)
+        .send({completed:true})
+        .expect(200)
+        .expect(res => {
+          expect(res.body.todo.completed).toBe(true)
+          expect(res.body.todo.completedAt).not.toBe(null)
+        })
+        .end(done)
 
   })
-
 })
