@@ -3,6 +3,7 @@ const {ObjectID} = require('mongodb')
 
 const {app} = require('./../server')
 const {Todo} = require('./../models/todo')
+const {User} = require('./../models/user')
 
 const todos = [
   {
@@ -127,7 +128,7 @@ describe('DELETE /todos/:id', () =>{
 })
 
 describe('PATCH /todos/:id', () => {
-    test('', done => {
+    test('it should complete a todo', done => {
 
       request(app)
         .patch(`/todos/${todos[0]._id}`)
@@ -139,5 +140,23 @@ describe('PATCH /todos/:id', () => {
         })
         .end(done)
 
+  })
+})
+
+describe('POST /users', () => {
+  beforeEach(done => {
+    User.remove({}).then(() => done()).catch(err => done(err))
+  })
+
+  let user = {email:'user@sample.com', password:'they can see my passwod'}
+  test('it should create a new user', done => {
+    request(app)
+      .post('/users')
+      .send(user)
+      .expect(200)
+      .expect(res => {
+        expect(res.body.email).toBe(user.email)
+      })
+      .end(done)
   })
 })

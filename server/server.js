@@ -15,9 +15,7 @@ const app = express()
 app.use(bodyParser.json())
 
 app.post('/todos', (req, res) => {
-  let todo = new Todo({
-    text: req.body.text
-  })
+  let todo = new Todo(pick(req.body, ['text']))
 
   todo.save()
     .then(doc => {
@@ -99,6 +97,21 @@ app.patch('/todos/:id', (req, res) => {
     .catch(err => {
       return res.send(404).send(err)
     })    
+})
+
+app.post('/users', (req, res) => {
+  let user = new User(pick(req.body, ['email', 'password']))
+
+  user.save()
+    .then(() => {
+      return user.generateAuthToken()
+    })
+    .then(token => {
+      res.header('x-auth', token).send(user)
+    })
+    .catch(err => {
+      res.status(404).send(err)
+    })
 
 })
 
