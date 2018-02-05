@@ -33,8 +33,6 @@ let UserSchema = new mongoose.Schema({
 })
 
 // overrides method to return only public data
-// that an be useful
-
 UserSchema.methods.toJSON = function() {
   let user = this
   let userObject = user.toObject()
@@ -50,10 +48,26 @@ UserSchema.methods.generateAuthToken = function() {
   user.tokens.push({access, token})
 
   return user.save().then(() => { return token })
+}
+
+UserSchema.statics.findByToken = function(token) {
+  let User = this
+  let decoded
+  
+  try {
+    decoded = jwt.verify(token, 'abc123')
+  } catch(e) {
+    return Promise.reject()
+  }
+
+  return User.findOne({
+    '_id': decoded._id,
+    'tokens.token': token,
+    'tokens.access': 'auth'
+  })
 
 }
 
-let User = mongoose.model('User', UserSchema )
-
+let User = mongoose.model('User', UserSchema)
 
 module.exports = {User}
