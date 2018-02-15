@@ -30,7 +30,7 @@ app.post('/todos', (req, res) => {
 app.get('/todos', (req, res) => {
   Todo.find()
     .then(todos => {
-      res.status(200).send({todos}) //send object instead off array to stay open to add more features to response object
+      res.status(200).send({todos}) // send object instead off array to stay open to add more features to response object
     })
     .catch(err => {
       res.status(404).send(err)
@@ -38,13 +38,13 @@ app.get('/todos', (req, res) => {
 })
 
 app.get('/todos/:id', (req, res) => {
-  if(!ObjectID.isValid(req.params.id)) {
+  if (!ObjectID.isValid(req.params.id)) {
     return res.status(404).send()
   }
 
   Todo.findById(req.params.id)
     .then(todo => {
-      if(!todo) {
+      if (!todo) {
         return res.status(404).send()
       }
       res.status(200).send({todo})
@@ -55,13 +55,13 @@ app.get('/todos/:id', (req, res) => {
 })
 
 app.delete('/todos/:id', (req, res) => {
-  if(!ObjectID.isValid(req.params.id)) {
+  if (!ObjectID.isValid(req.params.id)) {
     return res.status(404).send()
   }
 
   Todo.findByIdAndRemove(req.params.id)
     .then(todo => {
-      if(!todo) {
+      if (!todo) {
         return res.status(404).send()
       }
       res.status(200).send({todo})
@@ -75,21 +75,21 @@ app.patch('/todos/:id', (req, res) => {
   let id = req.params.id
   let body = pick(req.body, ['text', 'completed'])
 
-  if(!ObjectID.isValid(id)) {
+  if (!ObjectID.isValid(id)) {
     return res.status(404).send()
   }
 
-  if((typeof(body.completed) === typeof(true)) && body.completed){
+  if ((typeof (body.completed) === typeof (true)) && body.completed) {
     body.completedAt = new Date().getTime()
   } else {
-    return res.status(404).send("FAIL")
+    return res.status(404).send('FAIL')
     body.completed = false
     body.completedAt = null
   }
-  
-  Todo.findByIdAndUpdate(id, {$set: body}, {new:true})
+
+  Todo.findByIdAndUpdate(id, {$set: body}, {new: true})
     .then(todo => {
-      if(!todo) {
+      if (!todo) {
         return res.status(404).send()
       }
 
@@ -97,7 +97,7 @@ app.patch('/todos/:id', (req, res) => {
     })
     .catch(err => {
       return res.send(404).send(err)
-    })    
+    })
 })
 
 app.post('/users', (req, res) => {
@@ -113,10 +113,7 @@ app.post('/users', (req, res) => {
     .catch(err => {
       res.status(404).send(err)
     })
-
 })
-
-
 
 app.get('/users/me', authenticate, (req, res) => {
   res.send(req.user)
@@ -125,6 +122,5 @@ app.get('/users/me', authenticate, (req, res) => {
 app.listen(port, () => {
   console.log(`Start listen on port ${port}`)
 })
-
 
 module.exports = {app}

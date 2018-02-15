@@ -8,11 +8,11 @@ const {User} = require('./../models/user')
 const todos = [
   {
     _id: new ObjectID(),
-    text: "First test todo"
+    text: 'First test todo'
   },
   {
     _id: new ObjectID(),
-    text: "Second test todo"
+    text: 'Second test todo'
   }
 ]
 
@@ -26,7 +26,7 @@ beforeEach(done => {
 
 describe('POST /todos', () => {
   test('should create a new todo', done => {
-    let text = "Test todo test"
+    let text = 'Test todo test'
 
     request(app)
       .post('/todos')
@@ -36,7 +36,7 @@ describe('POST /todos', () => {
         expect(res.body.text).toBe(text)
       })
       .end((err, res) => {
-        if(err) {
+        if (err) {
           return done(err)
         }
 
@@ -45,18 +45,18 @@ describe('POST /todos', () => {
           expect(todos.length).toBe(1)
           expect(todos[0].text).toBe(text)
           done()
-        })        
+        })
         .catch(err => done(err))
       })
   })
 
-  test('should not create a todo with invalid body data' , done => {
+  test('should not create a todo with invalid body data', done => {
     request(app)
       .post('/todos')
       .send({})
       .expect(404)
       .end((err, res) => {
-        if(err) {
+        if (err) {
           return done(err)
         }
 
@@ -71,7 +71,7 @@ describe('POST /todos', () => {
 })
 
 describe('GET /todos', () => {
-  test('should get all todos', done =>{
+  test('should get all todos', done => {
     request(app)
       .get('/todos')
       .expect(200)
@@ -84,7 +84,6 @@ describe('GET /todos', () => {
 
 describe('GET /todos/:id', () => {
   test('it should return todo doc', done => {
-
     request(app)
       .get(`/todos/${todos[0]._id.toHexString()}`)
       .expect(200)
@@ -103,8 +102,7 @@ describe('GET /todos/:id', () => {
   })
 })
 
-describe('DELETE /todos/:id', () =>{
-
+describe('DELETE /todos/:id', () => {
   test('it should delete a todo', done => {
     request(app)
       .delete(`/todos/${todos[0]._id.toHexString()}`)
@@ -113,7 +111,7 @@ describe('DELETE /todos/:id', () =>{
         expect(res.body.todo.text).toBe(todos[0].text)
       })
       .end((err, res) => {
-        if(err) {
+        if (err) {
           return done(err)
         }
 
@@ -128,18 +126,16 @@ describe('DELETE /todos/:id', () =>{
 })
 
 describe('PATCH /todos/:id', () => {
-    test('it should complete a todo', done => {
-
-      request(app)
+  test('it should complete a todo', done => {
+    request(app)
         .patch(`/todos/${todos[0]._id}`)
-        .send({completed:true})
+        .send({completed: true})
         .expect(200)
         .expect(res => {
           expect(res.body.todo.completed).toBe(true)
           expect(res.body.todo.completedAt).not.toBe(null)
         })
         .end(done)
-
   })
 })
 
@@ -148,7 +144,7 @@ describe('POST /users', () => {
     User.remove({}).then(() => done()).catch(err => done(err))
   })
 
-  let user = {email:'user@sample.com', password:'they can see my passwod'}
+  let user = {email: 'user@sample.com', password: 'they can see my passwod'}
   test('it should create a new user', done => {
     request(app)
       .post('/users')
